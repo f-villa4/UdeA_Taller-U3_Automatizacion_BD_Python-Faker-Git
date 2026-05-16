@@ -1,9 +1,12 @@
 import os
-from faker import Faker
-from sqlalchemy import func, insert, select
 
 from dotenv import load_dotenv
+from faker import Faker
 from sqlalchemy import Column, Date, Integer, MetaData, String, Table, create_engine, func, insert, select
+
+
+TOTAL_REGISTROS = 100000
+TAMANO_LOTE = 5000
 
 
 def crear_tabla_personas(metadata):
@@ -22,6 +25,7 @@ def crear_tabla_personas(metadata):
 
     return personas
 
+
 def generar_persona(fake):
     persona = {
         "nombre": fake.name(),
@@ -34,6 +38,17 @@ def generar_persona(fake):
     }
 
     return persona
+
+
+def generar_lote_personas(fake, cantidad):
+    personas = []
+
+    for _ in range(cantidad):
+        persona = generar_persona(fake)
+        personas.append(persona)
+
+    return personas
+
 
 def main():
     load_dotenv()
@@ -51,16 +66,25 @@ def main():
     metadata.create_all(engine)
 
     fake = Faker("es_CO")
-    persona = generar_persona(fake)
+    registros_insertados = 0
 
     with engine.begin() as connection:
-        connection.execute(insert(personas), persona)
+        while registros_insertados < TOTAL_REGISTROS:
+            registros_restantes = TOTAL_REGISTROS - registros_insertados
+            cantidad_lote = min(TAMANO_LOTE, registros_restantes)
+
+            lote_personas = generar_lote_personas(fake, cantidad_lote)
+
+            connection.execute(insert(personas), lote_personas)
+
+            registros_insertados += cantidad_lote
+            print(f"Registros insertados: {registros_insertados}")
 
     with engine.connect() as connection:
         total = connection.execute(select(func.count()).select_from(personas)).scalar_one()
 
-    print("Registro generado e insertado correctamente.")
-    print(f"Total actual en personas_felipe: {total}")
+    print(f"Total final en personas_felipe: {total}")
+
 
 if __name__ == "__main__":
     main()

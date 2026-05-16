@@ -22,6 +22,7 @@ Hasta el momento se ha realizado:
 - Creacion automatica de la tabla `personas_felipe` usando SQLAlchemy.
 - Generacion de registros falsos usando Faker.
 - Insercion inicial de registros de prueba en la tabla `personas_felipe`.
+- Insercion masiva de 100.000 registros usando lotes de 5.000 registros.
 
 ## Configuracion
 
