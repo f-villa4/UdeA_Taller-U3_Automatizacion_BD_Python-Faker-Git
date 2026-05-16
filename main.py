@@ -1,7 +1,9 @@
 import os
+from faker import Faker
+from sqlalchemy import func, insert, select
 
 from dotenv import load_dotenv
-from sqlalchemy import Column, Date, Integer, MetaData, String, Table, create_engine
+from sqlalchemy import Column, Date, Integer, MetaData, String, Table, create_engine, func, insert, select
 
 
 def crear_tabla_personas(metadata):
@@ -20,6 +22,18 @@ def crear_tabla_personas(metadata):
 
     return personas
 
+def generar_persona(fake):
+    persona = {
+        "nombre": fake.name(),
+        "correo": fake.email(),
+        "fecha_nacimiento": fake.date_of_birth(minimum_age=18, maximum_age=80),
+        "ciudad": fake.city(),
+        "direccion": fake.address().replace("\n", ", "),
+        "telefono": fake.phone_number(),
+        "ocupacion": fake.job(),
+    }
+
+    return persona
 
 def main():
     load_dotenv()
@@ -32,12 +46,21 @@ def main():
     engine = create_engine(database_url)
 
     metadata = MetaData()
-    crear_tabla_personas(metadata)
+    personas = crear_tabla_personas(metadata)
 
     metadata.create_all(engine)
 
-    print("Tabla personas_felipe creada correctamente o ya existia.")
+    fake = Faker("es_CO")
+    persona = generar_persona(fake)
 
+    with engine.begin() as connection:
+        connection.execute(insert(personas), persona)
+
+    with engine.connect() as connection:
+        total = connection.execute(select(func.count()).select_from(personas)).scalar_one()
+
+    print("Registro generado e insertado correctamente.")
+    print(f"Total actual en personas_felipe: {total}")
 
 if __name__ == "__main__":
     main()

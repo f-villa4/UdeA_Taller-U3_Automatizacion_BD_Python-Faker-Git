@@ -20,6 +20,8 @@ Hasta el momento se ha realizado:
 - Prueba de conexion entre Python y MySQL mediante `test_mysql.py`.
 - Creacion del script principal `main.py`.
 - Creacion automatica de la tabla `personas_felipe` usando SQLAlchemy.
+- Generacion de registros falsos usando Faker.
+- Insercion inicial de registros de prueba en la tabla `personas_felipe`.
 
 ## Configuracion
 
