@@ -13,29 +13,19 @@ Hasta el momento se ha realizado:
 - Conexion del repositorio local con GitHub.
 - Creacion del entorno virtual de Python.
 - Instalacion de dependencias iniciales.
-- Configuracion de variables de entorno con `.env`.
+- Configuracion de `.env` con `DATABASE_URL`.
 - Creacion de `.env.example` como plantilla publica.
-- Creacion de `.gitignore` para evitar subir credenciales y archivos del entorno virtual.
+- Creacion de `.gitignore` para evitar subir credenciales y el entorno virtual.
 - Creacion de la base de datos `actividad_3_udea` en MySQL.
-- Prueba de conexion entre Python y MySQL.
+- Prueba de conexion entre Python y MySQL mediante `test_mysql.py`.
+- Creacion del script principal `main.py`.
+- Creacion automatica de la tabla `personas_felipe` usando SQLAlchemy.
 
-## Tecnologias usadas
+## Configuracion
 
-- Python
-- MySQL
-- DBeaver
-- SQLAlchemy
-- PyMySQL
-- python-dotenv
-- Faker
-- Git
-- GitHub
+El archivo `.env` contiene la conexion real a MySQL y no debe subirse al repositorio.
 
-## Configuracion temporal
-
-El archivo `.env` contiene la conexion real a la base de datos y no debe subirse al repositorio.
-
-El archivo `.env.example` contiene una plantilla como esta:
+El archivo `.env.example` contiene la plantilla publica:
 
 ```env
 DATABASE_URL=mysql+pymysql://user:password@localhost:3306/actividad_3_udea
